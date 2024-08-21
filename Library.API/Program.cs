@@ -1,4 +1,7 @@
 ﻿
+using Library.DataAccess;
+using Microsoft.EntityFrameworkCore;
+
 namespace Library.API;
 
 public class Program
@@ -13,6 +16,16 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+
+        builder.Services.AddDbContext<LibraryDbContext>(
+           options =>
+           {
+               options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(LibraryDbContext)));
+           }
+           );
+
+       
 
         var app = builder.Build();
 
