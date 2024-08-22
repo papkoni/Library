@@ -17,7 +17,9 @@ namespace Library.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FirstName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Surname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    Surname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Birthday = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Country = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,8 +34,8 @@ namespace Library.DataAccess.Migrations
                     Title = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     ISBN = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    RecieveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RecieveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Genre = table.Column<string>(type: "text", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uuid", nullable: false)
                 },

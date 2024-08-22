@@ -38,15 +38,15 @@ namespace Library.DataAccess.Configurations
 
             builder
                 .Property(b => b.ReturnDate)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(b => b.RecieveDate)
-                .IsRequired();
+                .IsRequired(false);
+
 
             builder
-                .Property(b => b.AuthorId)
-                .IsRequired();
+                .Property(b => b.AuthorId);
 
             
         }

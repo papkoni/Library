@@ -22,7 +22,14 @@ namespace Library.DataAccess.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder
+                .Property(author => author.Birthday)
+                .IsRequired(false);
 
+            builder
+                .Property(author => author.Country)
+                .IsRequired(false)
+                .HasMaxLength(50);
 
             builder
                 .HasMany(a => a.Books)

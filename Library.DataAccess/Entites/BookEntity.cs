@@ -13,9 +13,9 @@ namespace Library.DataAccess.Entites
 
         public string Description { get; set; } = string.Empty;
 
-        public DateTime RecieveDate { get; set; }
+        public DateTime? RecieveDate { get; set; }
 
-        public DateTime ReturnDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
 
         public string Genre { get; set; } = string.Empty;
 
