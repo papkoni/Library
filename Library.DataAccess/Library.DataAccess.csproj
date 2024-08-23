@@ -9,10 +9,12 @@
   <ItemGroup>
     <None Remove="Entites\" />
     <None Remove="Configurations\" />
+    <None Remove="Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entites\" />
     <Folder Include="Configurations\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20" />
@@ -21,5 +23,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.18" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Library.Core\Library.Core.csproj" />
   </ItemGroup>
 </Project>
