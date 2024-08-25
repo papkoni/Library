@@ -12,13 +12,14 @@ namespace Library.DataAccess.Configurations
 
         public void Configure(EntityTypeBuilder<BookEntity> builder)
         {
-            builder.HasKey(book => book.Id);
+            builder.HasKey(b => b.Id);
 
             builder.ToTable("book");
 
 
 
-            builder.Property(b => b.Title)
+            builder
+                .Property(b => b.Title)
                 .IsRequired()
                 .HasMaxLength(300);
 

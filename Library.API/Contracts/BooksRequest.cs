@@ -2,7 +2,7 @@
 namespace Library.API.Contracts
 {
     //приходит с фронта
-    public record RequestBook(
+    public record BooksRequest(
         
         string title,
         string isbn,

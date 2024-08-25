@@ -6,8 +6,9 @@ namespace Library.DataAccess
 {
 	public class LibraryDbContext: DbContext
 	{
-        public virtual DbSet<AuthorEntity> Author { get; set; }
-        public virtual DbSet<BookEntity> Book { get; set; }
+        public virtual DbSet<AuthorEntity> Authors { get; set; }
+        public virtual DbSet<BookEntity> Books { get; set; }
+        public virtual DbSet<BookEntity> Users { get; set; }
 
 
         public LibraryDbContext()
@@ -22,6 +23,7 @@ namespace Library.DataAccess
         {
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
 
 
             base.OnModelCreating(modelBuilder);

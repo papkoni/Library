@@ -5,31 +5,25 @@ namespace Library.Core.Models
 {
 	public class User
 	{
-        public Guid Id { get;  }
+        public Guid Id { get; set; }
 
-        public string Login { get;  } = string.Empty;
+        public string Name { get; private set; } = string.Empty;
 
-        public string Password { get;  } = string.Empty;
+        public string PasswordHash { get; private set; } = string.Empty;
 
+        public string Email { get; private set; } = string.Empty;
 
-
-        private User(Guid id, string login, string password)
+        private User(Guid id, string name, string passwordHash, string email)
 		{
             Id = id;
-            Login = login;
-            Password = password;
+            Name = name;
+            PasswordHash = passwordHash;
+            Email = email;
         }
 
-        public static Result<User> Create(Guid id, string login, string password)
+        public static User Create(Guid id, string name, string passwordHash, string email)
         {
-            if(string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
-            {
-                return Result.Failure<User>($"login or password can't be null or empty");
-            }
-
-            var user = new User(id, login, password);
-
-            return Result.Success(user);
+            return new User(id, name, passwordHash, email);
         }
 	}
 }

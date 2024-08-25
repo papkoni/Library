@@ -13,21 +13,21 @@ namespace Library.DataAccess.Configurations
             builder.ToTable("author");
 
             builder
-                .Property(author => author.FirstName)
+                .Property(a => a.FirstName)
                 .IsRequired()
                 .HasMaxLength(100);
 
             builder
-                .Property(author => author.Surname)
+                .Property(a => a.Surname)
                 .IsRequired()
                 .HasMaxLength(100);
 
             builder
-                .Property(author => author.Birthday)
+                .Property(a => a.Birthday)
                 .IsRequired(false);
 
             builder
-                .Property(author => author.Country)
+                .Property(a => a.Country)
                 .IsRequired(false)
                 .HasMaxLength(50);
 

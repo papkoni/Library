@@ -6,9 +6,13 @@ namespace Library.Core.Models
 	public class Author
 	{
         public Guid Id { get; }
+
         public string FirstName { get;  } = string.Empty;
+
         public string Surname { get;  } = string.Empty;
+
         public DateTime? Birthday { get;  }
+
         public string? Country { get; } = string.Empty;
 
 

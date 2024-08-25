@@ -1,5 +1,9 @@
 ﻿
+using Library.Application.Services;
+using Library.Core.Abstractions;
 using Library.DataAccess;
+using Library.DataAccess.Mapper;
+using Library.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.API;
@@ -25,7 +29,12 @@ public class Program
            }
            );
 
-       
+        builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+        builder.Services.AddScoped<IBooksService, BooksService>();
+
+
+        builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 
         var app = builder.Build();
 

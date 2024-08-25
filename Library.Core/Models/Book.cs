@@ -35,7 +35,18 @@ namespace Library.Core.Models
             AuthorId = authorId;
 		}
 
-       
+        private Book( string title, string isbn, string description,
+             DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
+        {
+            
+            Title = title;
+            ISBN = isbn;
+            Description = description;
+            RecieveDate = recieveDate;
+            ReturnDate = returnDate;
+            Genre = genre;
+            AuthorId = authorId;
+        }
 
 
         public static Result<Book> Create(Guid id, string title, string isbn, string description,
@@ -48,7 +59,15 @@ namespace Library.Core.Models
             return Result.Success(book);
         }
 
-        
+        public static Result<Book> Create(string title, string isbn, string description,
+           DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
+        {
+            // ADD VALIDATION!!!!!!!!!!!!!!!
+
+            var book = new Book(title, isbn, description, recieveDate, returnDate, genre, authorId);
+
+            return Result.Success(book);
+        }
 
 
     }

@@ -3,7 +3,7 @@ namespace Library.API.Contracts
 {
 	
     //идет на фронт
-    public record ResponseBook(
+    public record BooksResponse(
         Guid id,
         string title,
         string isbn,
