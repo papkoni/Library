@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.DataAccess.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20240825181455_AddUser")]
-    partial class AddUser
+    [Migration("20240827184353_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,10 @@ namespace Library.DataAccess.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("RecieveDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -87,6 +91,9 @@ namespace Library.DataAccess.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
@@ -94,7 +101,27 @@ namespace Library.DataAccess.Migrations
                     b.HasIndex("ISBN")
                         .IsUnique();
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("book", (string)null);
+                });
+
+            modelBuilder.Entity("Library.DataAccess.Entites.RefreshTokenEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("refreshToken", (string)null);
                 });
 
             modelBuilder.Entity("Library.DataAccess.Entites.UserEntity", b =>
@@ -115,9 +142,15 @@ namespace Library.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("RefreshTokenId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("RefreshTokenId")
                         .IsUnique();
 
                     b.ToTable("user", (string)null);
@@ -131,10 +164,38 @@ namespace Library.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Library.DataAccess.Entites.UserEntity", "User")
+                        .WithMany("Books")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Author");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Library.DataAccess.Entites.UserEntity", b =>
+                {
+                    b.HasOne("Library.DataAccess.Entites.RefreshTokenEntity", "RefreshToken")
+                        .WithOne("User")
+                        .HasForeignKey("Library.DataAccess.Entites.UserEntity", "RefreshTokenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RefreshToken");
                 });
 
             modelBuilder.Entity("Library.DataAccess.Entites.AuthorEntity", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("Library.DataAccess.Entites.RefreshTokenEntity", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Library.DataAccess.Entites.UserEntity", b =>
                 {
                     b.Navigation("Books");
                 });

@@ -9,10 +9,12 @@
   <ItemGroup>
     <None Remove="Handlers\" />
     <None Remove="Services\" />
+    <None Remove="Auth\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Handlers\" />
     <Folder Include="Services\" />
+    <Folder Include="Auth\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />

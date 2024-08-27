@@ -7,10 +7,10 @@ namespace Library.API.Contracts
         string title,
         string isbn,
         string description,
-        string gender,
         DateTime? recieveDate,
         DateTime? returnDate,
         string genre,
-        string authorName);
+        string authorID);
+
 }
 

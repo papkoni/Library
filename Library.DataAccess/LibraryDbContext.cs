@@ -8,8 +8,8 @@ namespace Library.DataAccess
 	{
         public virtual DbSet<AuthorEntity> Authors { get; set; }
         public virtual DbSet<BookEntity> Books { get; set; }
-        public virtual DbSet<BookEntity> Users { get; set; }
-
+        public virtual DbSet<UserEntity> Users { get; set; }
+        public virtual DbSet<UserEntity> RefreshTokens { get; set; }
 
         public LibraryDbContext()
 		{
@@ -24,6 +24,7 @@ namespace Library.DataAccess
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
 
 
             base.OnModelCreating(modelBuilder);

@@ -21,6 +21,9 @@ namespace Library.Core.Models
 
         public Guid AuthorId { get; }
 
+        public string ImageName { get; set; } = string.Empty;
+
+        public Guid? UserId { get; set; }
 
         private Book(Guid id, string title, string isbn, string description,
             DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
@@ -35,39 +38,20 @@ namespace Library.Core.Models
             AuthorId = authorId;
 		}
 
-        private Book( string title, string isbn, string description,
-             DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
-        {
-            
-            Title = title;
-            ISBN = isbn;
-            Description = description;
-            RecieveDate = recieveDate;
-            ReturnDate = returnDate;
-            Genre = genre;
-            AuthorId = authorId;
-        }
+        
 
 
-        public static Result<Book> Create(Guid id, string title, string isbn, string description,
+        public static Book Create(Guid id, string title, string isbn, string description,
             DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
         {
             // ADD VALIDATION!!!!!!!!!!!!!!!
 
             var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, authorId);
 
-            return Result.Success(book);
+            return book;
         }
 
-        public static Result<Book> Create(string title, string isbn, string description,
-           DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
-        {
-            // ADD VALIDATION!!!!!!!!!!!!!!!
-
-            var book = new Book(title, isbn, description, recieveDate, returnDate, genre, authorId);
-
-            return Result.Success(book);
-        }
+       
 
 
     }

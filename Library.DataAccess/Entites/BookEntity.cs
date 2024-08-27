@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Library.DataAccess.Entites
 {
+
     public class BookEntity
 	{
         public Guid Id { get; set; }
@@ -21,7 +22,14 @@ namespace Library.DataAccess.Entites
 
         public Guid AuthorId { get; set; }
 
-        public AuthorEntity? Author { get; set; }
+        public required AuthorEntity Author { get; set; }
+
+        public string ImageName { get; set; } = string.Empty;
+
+        public Guid? UserId { get; set; }
+
+        public UserEntity? User { get; set; }
     }
+
 }
 

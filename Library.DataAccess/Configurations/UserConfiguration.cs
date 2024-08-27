@@ -28,6 +28,14 @@ namespace Library.DataAccess.Configurations
             builder
                .Property(u => u.PasswordHash)
                .IsRequired();
+
+            builder
+               .Property(u => u.RefreshTokenId)
+               .IsRequired();
+
+            builder.HasOne(u => u.RefreshToken) 
+              .WithOne(r => r.User)        
+              .HasForeignKey<UserEntity>(u => u.RefreshTokenId);
         }
 
     }

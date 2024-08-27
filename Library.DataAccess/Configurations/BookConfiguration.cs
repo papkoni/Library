@@ -45,11 +45,19 @@ namespace Library.DataAccess.Configurations
                 .Property(b => b.RecieveDate)
                 .IsRequired(false);
 
+            builder
+              .Property(b => b.Genre);
+
+            builder
+              .Property(b => b.ImageName);
+
 
             builder
                 .Property(b => b.AuthorId);
 
-            
+            builder
+                .Property(b => b.UserId)
+                .IsRequired(false);
         }
 
 	}

@@ -1,0 +1,11 @@
+﻿using System;
+namespace Library.Application.Auth
+{
+    public interface IPasswordHasher
+    {
+        string Generate(string password);
+
+        bool Verify(string password, string hashedPassword);
+    }
+}
+

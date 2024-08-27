@@ -1,6 +1,7 @@
 ﻿using System;
 namespace Library.DataAccess.Entites
 {
+
 	public class UserEntity
 	{
         public Guid Id { get; set; }
@@ -11,6 +12,14 @@ namespace Library.DataAccess.Entites
 
         public string Email { get;  set; } = string.Empty;
 
+        public Guid RefreshTokenId { get; set; }
+
+        public required RefreshTokenEntity RefreshToken { get; set; }
+
+        public List<BookEntity>? Books { get; set; }
+
+
     }
+
 }
 

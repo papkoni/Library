@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Library.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,6 +27,40 @@ namespace Library.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "refreshToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_refreshToken", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    RefreshTokenId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_user_refreshToken_RefreshTokenId",
+                        column: x => x.RefreshTokenId,
+                        principalTable: "refreshToken",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "book",
                 columns: table => new
                 {
@@ -37,7 +71,9 @@ namespace Library.DataAccess.Migrations
                     RecieveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Genre = table.Column<string>(type: "text", nullable: false),
-                    AuthorId = table.Column<Guid>(type: "uuid", nullable: false)
+                    AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ImageName = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -48,6 +84,11 @@ namespace Library.DataAccess.Migrations
                         principalTable: "author",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_book_user_UserId",
+                        column: x => x.UserId,
+                        principalTable: "user",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -60,6 +101,23 @@ namespace Library.DataAccess.Migrations
                 table: "book",
                 column: "ISBN",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_book_UserId",
+                table: "book",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_Email",
+                table: "user",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_RefreshTokenId",
+                table: "user",
+                column: "RefreshTokenId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -70,6 +128,12 @@ namespace Library.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "author");
+
+            migrationBuilder.DropTable(
+                name: "user");
+
+            migrationBuilder.DropTable(
+                name: "refreshToken");
         }
     }
 }
