@@ -26,7 +26,7 @@ namespace Library.Core.Models
         public Guid? UserId { get; set; }
 
         private Book(Guid id, string title, string isbn, string description,
-            DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
+            DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId,string imageName, Guid? userId)
 		{
             Id = id;
             Title = title;
@@ -36,17 +36,20 @@ namespace Library.Core.Models
             ReturnDate = returnDate;
             Genre = genre;
             AuthorId = authorId;
-		}
+            ImageName = imageName;
+            UserId = userId;
+
+        }
 
         
 
 
-        public static Book Create(Guid id, string title, string isbn, string description,
-            DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId)
+        public static Book Create(Guid id, string title, string isbn, string description,DateTime? recieveDate,
+            DateTime? returnDate, string genre, Guid authorId, string imageName = "", Guid? userId = null)
         {
             // ADD VALIDATION!!!!!!!!!!!!!!!
 
-            var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, authorId);
+            var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, authorId, imageName, userId);
 
             return book;
         }

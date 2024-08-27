@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.DataAccess.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20240827184353_init")]
-    partial class init
+    [Migration("20240827233417_init2")]
+    partial class init2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,8 +191,7 @@ namespace Library.DataAccess.Migrations
 
             modelBuilder.Entity("Library.DataAccess.Entites.RefreshTokenEntity", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Library.DataAccess.Entites.UserEntity", b =>

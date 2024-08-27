@@ -13,13 +13,20 @@ namespace Library.Core.Models
 
         public string Email { get; private set; } = string.Empty;
 
+        public Guid RefreshTokenId { get; set; }
+
+
+
         private User(Guid id, string name, string passwordHash, string email)
 		{
             Id = id;
             Name = name;
             PasswordHash = passwordHash;
             Email = email;
+            
         }
+
+        
 
         public static User Create(Guid id, string name, string passwordHash, string email)
         {

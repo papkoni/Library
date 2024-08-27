@@ -14,7 +14,10 @@ namespace Library.DataAccess.Configurations
             builder.ToTable("refreshToken");
 
             builder.Property(r => r.ExpiryDate)
-                  .IsRequired();
+                  .IsRequired()
+                  .HasConversion(
+                v => v.ToUniversalTime(), // Преобразование к UTC перед сохранением
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)); // Преобразование к UTC при загрузке;
 
             builder.Property(r => r.Token)
                    .IsRequired();

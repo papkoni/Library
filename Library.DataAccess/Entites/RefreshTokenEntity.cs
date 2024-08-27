@@ -12,7 +12,7 @@ namespace Library.DataAccess.Entites
 
         public DateTime ExpiryDate { get; set; }
 
-        public required UserEntity User { get; set; } 
+        public UserEntity? User { get; set; } 
 
     }
 

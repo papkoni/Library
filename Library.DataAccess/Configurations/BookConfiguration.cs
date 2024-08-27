@@ -46,14 +46,17 @@ namespace Library.DataAccess.Configurations
                 .IsRequired(false);
 
             builder
-              .Property(b => b.Genre);
+              .Property(b => b.Genre)
+              .IsRequired();
 
             builder
-              .Property(b => b.ImageName);
+              .Property(b => b.ImageName)
+              .IsRequired();
 
 
             builder
-                .Property(b => b.AuthorId);
+                .Property(b => b.AuthorId)
+                .IsRequired();
 
             builder
                 .Property(b => b.UserId)

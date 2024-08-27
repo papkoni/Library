@@ -14,7 +14,7 @@ namespace Library.DataAccess.Entites
 
         public Guid RefreshTokenId { get; set; }
 
-        public required RefreshTokenEntity RefreshToken { get; set; }
+        public RefreshTokenEntity? RefreshToken { get; set; }
 
         public List<BookEntity>? Books { get; set; }
 

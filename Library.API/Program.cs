@@ -68,6 +68,7 @@ public class Program
         builder.Services.AddScoped<IUsersService, UsersService>();
 
         builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+        builder.Services.AddScoped<IRefreshTokensRepository, RefreshTokensRepository>();
 
 
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();

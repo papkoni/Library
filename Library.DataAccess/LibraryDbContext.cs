@@ -9,7 +9,7 @@ namespace Library.DataAccess
         public virtual DbSet<AuthorEntity> Authors { get; set; }
         public virtual DbSet<BookEntity> Books { get; set; }
         public virtual DbSet<UserEntity> Users { get; set; }
-        public virtual DbSet<UserEntity> RefreshTokens { get; set; }
+        public virtual DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
 
         public LibraryDbContext()
 		{

@@ -14,28 +14,22 @@ namespace Library.Infrastructure.Authentication
     public class JwtProvider : IJwtProvider
     {
         private readonly JwtOptions _options;
-         //delete
+
         public JwtProvider(IOptions<JwtOptions> options)
         {
             _options = options.Value;
         }
-        //delete
 
         public (string accessToken, string refreshToken) Generate(User user)
         {
-            throw new NotImplementedException();
+            // Генерация Access токена
+            var accessToken = GenerateToken(user, _options.AccessTokenExpiresMinutes);
+
+            // Генерация Refresh токена
+            var refreshToken = GenerateToken(user, _options.RefreshTokenExpiresDays, isRefreshToken: true);
+
+            return (accessToken, refreshToken);
         }
-
-        //public (string accessToken, string refreshToken) Generate(User user)
-        //{
-        //    // Генерация Access токена
-        //    var accessToken = GenerateToken(user, _options.AccessTokenExpiresMinutes);
-
-        //    // Генерация Refresh токена
-        //    var refreshToken = GenerateToken(user, _options.RefreshTokenExpiresDays, isRefreshToken: true);
-
-        //    return (accessToken, refreshToken);
-        //}
 
         private string GenerateToken(User user, double expiresIn, bool isRefreshToken = false)
         {
@@ -67,11 +61,13 @@ namespace Library.Infrastructure.Authentication
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        string IJwtProvider.GenerateToken(User user, double expiresIn, bool isRefreshToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task UpdateRefreshToken(User user, RefreshToken refreshToken)
+        //{
+
+        //}
+
     }
+
 
 }
 
