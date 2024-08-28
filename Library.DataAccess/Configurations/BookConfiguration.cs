@@ -39,11 +39,17 @@ namespace Library.DataAccess.Configurations
 
             builder
                 .Property(b => b.ReturnDate)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasConversion(
+                    v => v.HasValue ? v.Value.ToUniversalTime() : (DateTime?)null, // Преобразование к UTC при сохранении, если значение не null
+                    v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : null);
 
             builder
                 .Property(b => b.RecieveDate)
-                .IsRequired(false);
+                .IsRequired(false)
+                .HasConversion(
+                    v => v.HasValue ? v.Value.ToUniversalTime() : (DateTime?)null, // Преобразование к UTC при сохранении, если значение не null
+                    v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : null);
 
             builder
               .Property(b => b.Genre)

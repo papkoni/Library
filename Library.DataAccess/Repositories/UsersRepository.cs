@@ -8,7 +8,7 @@ namespace Library.DataAccess.Repositories
 {
 	public class UsersRepository: IUsersRepository
     {
-        //ПЕРЕДЕЛАТЬ ВСЕ ПОД НОВЫЕ ЭНТИТИ
+        
 
         private readonly LibraryDbContext _context;
 
@@ -21,6 +21,7 @@ namespace Library.DataAccess.Repositories
             _mapper = mapper;
         }
 
+        //ПЕРЕДЕЛАТЬ ВСЕ ПОД НОВЫЕ ЭНТИТИ
         public async Task Add(User user)
         {
             var userEntity = new UserEntity()
@@ -49,8 +50,28 @@ namespace Library.DataAccess.Repositories
                 return null;
             }
 
-            return User.Create(userEntity.Id, userEntity.Name, userEntity.PasswordHash, userEntity.Email);
+            var user = User.Create(userEntity.Id, userEntity.Name, userEntity.PasswordHash, userEntity.Email);
+            user.RefreshTokenId = userEntity.RefreshTokenId;
+            return user;
         }
+
+        public async Task<User?> GetById(string id)
+        {
+            
+            var userEntity = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(id));
+
+            if (userEntity == null)
+            {
+                return null;
+            }
+
+            var user = User.Create(userEntity.Id, userEntity.Name, userEntity.PasswordHash, userEntity.Email);
+            user.RefreshTokenId = userEntity.RefreshTokenId;
+            return user;
+        }
+
 
     }
 }

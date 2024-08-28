@@ -24,7 +24,10 @@ namespace Library.DataAccess.Configurations
 
             builder
                 .Property(a => a.Birthday)
-                .IsRequired(false);
+                .IsRequired()
+                .HasConversion(
+                v => v.ToUniversalTime(), // Преобразование к UTC перед сохранением
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)); // Преобразование к UTC при загрузке;
 
             builder
                 .Property(a => a.Country)

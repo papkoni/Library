@@ -8,6 +8,7 @@ namespace Library.Core.Abstractions
         Task Add(User user);
 
         Task<User?> GetByEmail(string email);
+        Task<User?> GetById(string id);
     }
 }
 

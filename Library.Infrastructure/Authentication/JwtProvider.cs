@@ -11,6 +11,7 @@ using Library.Application.Auth;
 
 namespace Library.Infrastructure.Authentication
 {
+
     public class JwtProvider : IJwtProvider
     {
         private readonly JwtOptions _options;
@@ -61,10 +62,76 @@ namespace Library.Infrastructure.Authentication
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        //public Task UpdateRefreshToken(User user, RefreshToken refreshToken)
-        //{
+        public ClaimsPrincipal? ValidateRefreshToken(string refreshToken)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(_options.SecretKey);
 
-        //}
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true, 
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero 
+                };
+
+                var principal = tokenHandler.ValidateToken(refreshToken, validationParameters, out SecurityToken validatedToken);
+
+                var isRefreshTokenClaim = principal.Claims.FirstOrDefault(c => c.Type == "isRefreshToken");
+                if (isRefreshTokenClaim == null || isRefreshTokenClaim.Value != "true")
+                {
+                    throw new SecurityTokenException("Invalid refresh token.");
+                }
+
+                return principal;
+            }
+            
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token validation failed: {ex.Message}");
+                return null;
+            }
+        }
+
+        public ClaimsPrincipal? ValidateAccessToken(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(_options.SecretKey);
+
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+
+                if (validatedToken is JwtSecurityToken jwtToken)
+                {
+                    var userIdClaim = principal.FindFirst("userId");
+                    if (userIdClaim == null || string.IsNullOrEmpty(userIdClaim.Value))
+                    {
+                        throw new SecurityTokenException("Invalid token");
+                    }
+                }
+
+                return principal;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token validation failed: {ex.Message}");
+                return null;
+            }
+        }
 
     }
 

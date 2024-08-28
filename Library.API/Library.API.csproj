@@ -35,9 +35,11 @@
   <ItemGroup>
     <None Remove="Contracts\" />
     <None Remove="Extensions\" />
+    <None Remove="Middlewares\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contracts\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 </Project>

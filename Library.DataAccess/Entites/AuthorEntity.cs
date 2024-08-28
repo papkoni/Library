@@ -11,7 +11,7 @@ namespace Library.DataAccess.Entites
 
         public string Surname { get; set; } = string.Empty;
 
-        public DateTime? Birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         public string? Country { get; set; } = string.Empty;
 

@@ -44,27 +44,48 @@ namespace Library.Application.Services
             return (accessToken, refreshToken, user.Name, user.Email, user.Id );
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<(string, string, string, string, Guid)> Login(string email, string password)
         {
-            var user = await _usersRepository.GetByEmail(email);
+            var findUser = await _usersRepository.GetByEmail(email);
 
-            var result = _passwordHasher.Verify(password, user.PasswordHash);
+           
+
+            var result = _passwordHasher.Verify(password, findUser.PasswordHash);
 
             if (result == false)
             {
                 throw new Exception("Failed to login");
             }
 
-            var token = _jwtProvider.Generate(user);
+            var (accessToken, refreshToken) = _jwtProvider.Generate(findUser);
+            await _refreshTokensRepository.UpdateToken(findUser.RefreshTokenId, refreshToken);
+            return (accessToken, refreshToken, findUser.Name, findUser.Email, findUser.Id);
 
-            return ""  /*token*/;
         }
-         
-        public async Task<(string, string)> GenerateTokens()
+
+        public async Task<(string, string, string, string, Guid)> Refresh(string oldRefreshToken)
         {
+            var principal = _jwtProvider.ValidateRefreshToken(oldRefreshToken);
 
-            return ("", "");
+            var oldRefreshTokenInDb = await _refreshTokensRepository.GetRefreshTokenAsync(oldRefreshToken);
+            if(principal == null || oldRefreshTokenInDb == null)
+            {
+                throw new Exception();
+            }
+
+            var userId = principal.FindFirst("userId")?.Value;
+
+            if(string.IsNullOrEmpty(userId)) { throw new Exception(); }
+            var user = await _usersRepository.GetById(userId);
+            if (user == null) { throw new Exception(); }
+
+            var (accessToken, refreshToken) = _jwtProvider.Generate(user);
+            await _refreshTokensRepository.UpdateToken(user.RefreshTokenId, refreshToken);
+            return (accessToken, refreshToken, user.Name, user.Email, user.Id);
+
         }
+
+
 
 
     }
