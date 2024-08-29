@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using static CSharpFunctionalExtensions.Result;
 using Library.API.Extensions;
+using Library.API.Middlewares;
+
 namespace Library.API;
 
 public class Program
@@ -73,9 +75,9 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        //app.UseCustomExceptionHandler();
         app.UseHttpsRedirection();
 
+        app.UseCustomExceptionHandler();
         app.UseAuthentication();
         app.UseAuthorization();
 

@@ -3,12 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Library.API.Contracts
 {
-
-
-    public record LoginUserRequest(
+    public record LoginUserResponse(
+        [Required] Guid Id,
         [Required] string Email,
-        [Required] string Password
+        [Required] string Name
         );
-
 }
 

@@ -48,7 +48,8 @@ namespace Library.Application.Services
         {
             var findUser = await _usersRepository.GetByEmail(email);
 
-           
+            if (findUser == null) { throw new Exception(); }
+
 
             var result = _passwordHasher.Verify(password, findUser.PasswordHash);
 

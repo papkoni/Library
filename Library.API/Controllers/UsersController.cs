@@ -1,7 +1,5 @@
 ﻿using Library.API.Contracts;
-using Library.Application.Services;
 using Library.Core.Abstractions;
-using Library.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers
@@ -41,21 +39,21 @@ namespace Library.API.Controllers
 
 
         [HttpPost("Login")]
-        public async Task<IResult> Login([FromBody] RegisterUserRequest request)
+        public async Task<IResult> Login([FromBody] LoginUserRequest request)
         {
             var context = HttpContext;
 
             var (accessToken, refreshToken, name, email, id) = await _usersService.Login( request.Email, request.Password);
 
-            var registerUserResponse = new RegisterUserResponse(id, name, email);
+            var registerUserResponse = new LoginUserResponse(id, email, name);
 
             context.Response.Cookies.Append("secretCookie", refreshToken);
 
             return Results.Ok(new { accessToken, refreshToken, user = registerUserResponse });
         }
 
-        [HttpPost("Login")]
-        public async Task<IResult> Refresh([FromBody] RegisterUserRequest request)
+        [HttpPost("RefreshToken")]
+        public async Task<IResult> Refresh()
         {
             var context = HttpContext;
 
