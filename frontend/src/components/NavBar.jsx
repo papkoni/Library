@@ -3,13 +3,16 @@ import { Context } from "../main";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import {NavLink} from "react-router-dom";
-import { LIBRARY_ROUTE } from "../utils/consts";
+import { LIBRARY_ROUTE, LOGIN_ROUTE, ADMIN_ROUTE } from "../utils/consts";
 import {Button} from "react-bootstrap";
 import {observer} from "mobx-react-lite";
 import Container from "react-bootstrap/Container";
+import {useNavigate} from "react-router-dom"
 
 
 const NavBar = observer(() => {
+    const navigateTo = useNavigate()
+
     const {user} = useContext(Context)
     return (
         
@@ -20,13 +23,13 @@ const NavBar = observer(() => {
                     <Nav className="ms-auto" style={{color: 'white'}}>
                         <Button
                             variant={"outline-light"}
-                            onClick={() => history.push(ADMIN_ROUTE)}
+                            onClick={() => navigateTo(ADMIN_ROUTE)}
                         >
                             Админ панель
                         </Button>
                         <Button
                             variant={"outline-light"}
-                            onClick={() => user.setIsAuth(false)}
+                            onClick={() => navigateTo(LOGIN_ROUTE)}
                             className="ms-2"
                         >
                             Выйти

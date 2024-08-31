@@ -1,5 +1,5 @@
 import Library from "./pages/Library"
-import Book from "./pages/Book"
+import BookPage from "./pages/BookPage"
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import {ADMIN_ROUTE, LIBRARY_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, BOOK_ROUTE} from "./utils/consts";
@@ -21,7 +21,7 @@ export const publicRoutes = [
     },
     {
         path: BOOK_ROUTE + '/:id',
-        Component: Book
+        Component: BookPage
     },
     {
         path: LOGIN_ROUTE,

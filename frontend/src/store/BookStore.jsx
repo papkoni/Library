@@ -12,7 +12,7 @@ export default class BookStore {
                 returnDate: new Date(2021, 7, 15), 
                 genre: 'Fiction', 
                 authorId: 'some-guid-1', 
-                imageName: '/Users/nikitapapko/ModsenProject/Library/frontend/src/store/image1.png', 
+                imageName: '\\Users\\nikitapapko\\ModsenProject\\Library\\frontend\\src\\store\\image1.png', 
                 userId: 'user-guid-1'
             },
             { 
@@ -27,6 +27,44 @@ export default class BookStore {
                 imageName: '/Users/nikitapapko/ModsenProject/Library/frontend/src/store/image1.png', 
                 userId: null 
             },
+            { 
+                id: 'book-guid-3', 
+                title: 'Book Title 2', 
+                isbn: '0987654321', 
+                description: 'This is another book description', 
+                recieveDate: new Date(2021, 7, 20), 
+                returnDate: new Date(2021, 8, 20), 
+                genre: 'Non-Fiction', 
+                authorId: 'some-guid-2', 
+                imageName: '/Users/nikitapapko/ModsenProject/Library/frontend/src/store/image1.png', 
+                userId: null 
+            },
+            { 
+                id: 'book-guid-4', 
+                title: 'Book Title 2', 
+                isbn: '0987654321', 
+                description: 'This is another book description', 
+                recieveDate: new Date(2021, 7, 20), 
+                returnDate: new Date(2021, 8, 20), 
+                genre: 'Non-Fiction', 
+                authorId: 'some-guid-2', 
+                imageName: '/Users/nikitapapko/ModsenProject/Library/frontend/src/store/image1.png', 
+                userId: null 
+            },
+            { 
+                id: 'book-guid-5', 
+                title: 'Book Title 2', 
+                isbn: '0987654321', 
+                description: 'This is another book description', 
+                recieveDate: new Date(2021, 7, 20), 
+                returnDate: new Date(2021, 8, 20), 
+                genre: 'Non-Fiction', 
+                authorId: 'some-guid-2', 
+                imageName: '/Users/nikitapapko/ModsenProject/Library/frontend/src/store/image1.png', 
+                userId: null 
+            },
+            
+            
         ];
         
         makeAutoObservable(this);

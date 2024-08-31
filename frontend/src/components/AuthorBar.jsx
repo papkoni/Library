@@ -4,6 +4,7 @@ import {Context} from "../main";
 import ListGroup from "react-bootstrap/ListGroup";
 
 const AuthorBar = observer(() => {
+    
     const {author} = useContext(Context)
     return (
         <ListGroup>
