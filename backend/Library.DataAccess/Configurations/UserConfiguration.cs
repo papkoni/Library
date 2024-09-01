@@ -23,7 +23,8 @@ namespace Library.DataAccess.Configurations
 
             builder
                .Property(u => u.Name)
-               .IsRequired();
+               .IsRequired()
+               .HasMaxLength(100);
 
             builder
                .Property(u => u.PasswordHash)

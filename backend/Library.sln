@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.DataAccess", "Libra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Infrastructure", "Library.Infrastructure\Library.Infrastructure.csproj", "{173E3281-C509-4D8A-8683-B0EB634F0F8D}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F11ACF2F-FFFD-487B-9629-506607A60201}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{173E3281-C509-4D8A-8683-B0EB634F0F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{173E3281-C509-4D8A-8683-B0EB634F0F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{173E3281-C509-4D8A-8683-B0EB634F0F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F11ACF2F-FFFD-487B-9629-506607A60201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11ACF2F-FFFD-487B-9629-506607A60201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11ACF2F-FFFD-487B-9629-506607A60201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11ACF2F-FFFD-487B-9629-506607A60201}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

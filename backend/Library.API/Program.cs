@@ -46,6 +46,9 @@ public class Program
            }
            );
 
+        builder.Services.AddStackExchangeRedisCache(options =>
+            options.Configuration = builder.Configuration.GetConnectionString("Cache"));
+
         builder.Services.AddScoped<IBooksRepository, BooksRepository>();
         builder.Services.AddScoped<IBooksService, BooksService>();
         builder.Services.AddScoped<IUsersService, UsersService>();
@@ -74,10 +77,11 @@ public class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.ApplyMigrations();
         }
         app.UseHttpsRedirection();
 
-        app.UseCustomExceptionHandler();
+        //app.UseCustomExceptionHandler();
         app.UseAuthentication();
         app.UseAuthorization();
 
