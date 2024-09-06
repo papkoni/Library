@@ -2,6 +2,10 @@
 using Library.Core.Abstractions;
 using Library.Core.Models;
 using Library.Application.Auth;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+
+
 namespace Library.Application.Services
 {
 	public class UsersService: IUsersService
@@ -22,7 +26,7 @@ namespace Library.Application.Services
 
         }
 
-        public async Task<(string, string, string, string, Guid)> Register(string name, string password, string email)
+        public async Task<(string, string)> Register(string name, string password, string email)
         {
 
             var findUser = await _usersRepository.GetByEmail(email);
@@ -34,17 +38,17 @@ namespace Library.Application.Services
             var hashedPassword = _passwordHasher.Generate(password);
             
 
-            var user = User.Create(Guid.NewGuid(), name, hashedPassword, email);
+            var user = User.Create(Guid.NewGuid(), name, hashedPassword, email, "User");
             var (accessToken, refreshToken) = _jwtProvider.Generate(user);
             var token = RefreshToken.Create(Guid.NewGuid(), refreshToken, DateTime.Now);
             user.RefreshTokenId = token.Id;
             await _refreshTokensRepository.Add(token);
             await _usersRepository.Add(user);
 
-            return (accessToken, refreshToken, user.Name, user.Email, user.Id );
+            return (accessToken, refreshToken );
         }
 
-        public async Task<(string, string, string, string, Guid)> Login(string email, string password)
+        public async Task<(string, string, User?)> Login(string email, string password)
         {
             var findUser = await _usersRepository.GetByEmail(email);
 
@@ -60,32 +64,63 @@ namespace Library.Application.Services
 
             var (accessToken, refreshToken) = _jwtProvider.Generate(findUser);
             await _refreshTokensRepository.UpdateToken(findUser.RefreshTokenId, refreshToken);
-            return (accessToken, refreshToken, findUser.Name, findUser.Email, findUser.Id);
+            return (accessToken, refreshToken, findUser);
 
         }
 
-        public async Task<(string, string, string, string, Guid)> Refresh(string oldRefreshToken)
+        public async Task<(string, string, User)> Refresh(string oldRefreshToken, string userId)
         {
-            var principal = _jwtProvider.ValidateRefreshToken(oldRefreshToken);
+            var goodToken = _jwtProvider.ValidateRefreshToken(oldRefreshToken);
 
-            var oldRefreshTokenInDb = await _refreshTokensRepository.GetRefreshTokenAsync(oldRefreshToken);
-            if(principal == null || oldRefreshTokenInDb == null)
+            if (!goodToken)
             {
-                throw new Exception();
+                throw new SecurityTokenException("Invalid refresh token.");
             }
 
-            var userId = principal.FindFirst("userId")?.Value;
+            var oldRefreshTokenInDb = await _refreshTokensRepository.GetRefreshTokenAsync(oldRefreshToken);
+            if (oldRefreshTokenInDb == null)
+            {
+                throw new SecurityTokenException("Refresh token not found in database.");
+            }
 
-            if(string.IsNullOrEmpty(userId)) { throw new Exception(); }
+           
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new SecurityTokenException("Invalid token, userId claim is missing.");
+            }
+
             var user = await _usersRepository.GetById(userId);
-            if (user == null) { throw new Exception(); }
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
 
             var (accessToken, refreshToken) = _jwtProvider.Generate(user);
             await _refreshTokensRepository.UpdateToken(user.RefreshTokenId, refreshToken);
-            return (accessToken, refreshToken, user.Name, user.Email, user.Id);
 
+            return (accessToken, refreshToken, user);
         }
 
+        public async Task<User> CheckAccess(string userId)
+        {
+
+            var user = await _usersRepository.GetById(userId);
+
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+            //var newAccessToken = _jwtProvider.GenerateAccess(user);
+
+
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+
+            return user;
+        }
 
 
 

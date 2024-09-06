@@ -32,20 +32,34 @@ namespace Library.Infrastructure.Authentication
             return (accessToken, refreshToken);
         }
 
+        public string GenerateAccess(User user)
+        {
+            // Генерация Access токена
+            var accessToken = GenerateToken(user, _options.AccessTokenExpiresMinutes);
+
+            // Генерация Refresh токена
+
+            return accessToken;
+        }
+
+
         private string GenerateToken(User user, double expiresIn, bool isRefreshToken = false)
         {
-            Claim[] claims = new Claim[]
+            var claims = new List<Claim>
             {
-            new Claim("userId", user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
             };
 
-            if (isRefreshToken)
+            if (!isRefreshToken)
             {
-                claims = new Claim[]
-                {
-                new Claim("userId", user.Id.ToString()),
-                new Claim("isRefreshToken", "true")
-                };
+                claims.Add(new Claim(ClaimTypes.Role, user.Role));
+            }
+            else
+            {
+                claims.Add(new Claim("isRefreshToken", "true"));
+
             }
 
             var signingCredentials = new SigningCredentials(
@@ -62,7 +76,7 @@ namespace Library.Infrastructure.Authentication
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public ClaimsPrincipal? ValidateRefreshToken(string refreshToken)
+        public bool ValidateRefreshToken(string refreshToken)
         {
             try
             {
@@ -82,56 +96,22 @@ namespace Library.Infrastructure.Authentication
                 var principal = tokenHandler.ValidateToken(refreshToken, validationParameters, out SecurityToken validatedToken);
 
                 var isRefreshTokenClaim = principal.Claims.FirstOrDefault(c => c.Type == "isRefreshToken");
-                if (isRefreshTokenClaim == null || isRefreshTokenClaim.Value != "true")
+                if (isRefreshTokenClaim == null && isRefreshTokenClaim.Value != "true")
                 {
                     throw new SecurityTokenException("Invalid refresh token.");
                 }
 
-                return principal;
+                return true;
             }
             
             catch (Exception ex)
             {
                 Console.WriteLine($"Token validation failed: {ex.Message}");
-                return null;
+                return false;
             }
         }
 
-        public ClaimsPrincipal? ValidateAccessToken(string token)
-        {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_options.SecretKey);
-
-                var validationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                };
-
-                var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-
-                if (validatedToken is JwtSecurityToken jwtToken)
-                {
-                    var userIdClaim = principal.FindFirst("userId");
-                    if (userIdClaim == null || string.IsNullOrEmpty(userIdClaim.Value))
-                    {
-                        throw new SecurityTokenException("Invalid token");
-                    }
-                }
-
-                return principal;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Token validation failed: {ex.Message}");
-                return null;
-            }
-        }
+        
 
     }
 

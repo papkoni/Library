@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.Json.Serialization;
+using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 
 namespace Library.Core.Models
@@ -6,6 +7,10 @@ namespace Library.Core.Models
 	public class User
 	{
         public Guid Id { get; set; }
+
+        public string Role { get; set; }
+
+
 
         public string Name { get; private set; } = string.Empty;
 
@@ -17,20 +22,22 @@ namespace Library.Core.Models
 
 
 
-        private User(Guid id, string name, string passwordHash, string email)
+        [JsonConstructor]
+
+        public User(Guid id, string name, string passwordHash, string email, string role)
 		{
             Id = id;
             Name = name;
             PasswordHash = passwordHash;
             Email = email;
-            
+            Role = role;
         }
 
         
 
-        public static User Create(Guid id, string name, string passwordHash, string email)
+        public static User Create(Guid id, string name, string passwordHash, string email, string role)
         {
-            return new User(id, name, passwordHash, email);
+            return new User(id, name, passwordHash, email, role);
         }
 	}
 }

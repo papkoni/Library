@@ -1,18 +1,23 @@
 ﻿
+using Library.Application.Cache;
 using Library.Core.Abstractions;
 using Library.Core.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Library.Application.Services
 {
 	public class BooksService: IBooksService
     {
 
+
 		private readonly IBooksRepository _booksRepository;
 
-        public BooksService(IBooksRepository booksRepository)
+        private readonly IImageCacheHandler _imageCacheHandler;
+
+        public BooksService(IBooksRepository booksRepository, IImageCacheHandler imageCacheHandler)
 		{
 			_booksRepository = booksRepository;
-
+            _imageCacheHandler = imageCacheHandler;
         }
 
         public async Task<List<Book>> GetAllBooks()
@@ -21,10 +26,24 @@ namespace Library.Application.Services
 
         }
 
-        public async Task<Book?> GetBooksById(Guid id)
+        public async Task<(Book, byte[])> GetBookById(Guid id)
         {
-            return await _booksRepository.GetBooksById(id);
+            var book =  await _booksRepository.GetBookById(id);
+
+            if(book == null)
+            {
+                throw new Exception("GetBooksById in service return null");
+            }
+            var imageBytes = await _imageCacheHandler.GetImageAsync(book.ImageName);
+
+            if (imageBytes == null)
+            {
+                throw new Exception("GetBooksById in return null");
+            }
+            return (book, imageBytes);
+
         }
+
 
 
         public async Task<Book?> GetBooksByISBN(string isbn)
@@ -52,9 +71,9 @@ namespace Library.Application.Services
             await _booksRepository.Delete(id);
         }
 
-        
 
-        
+       
+
     }
 }
 

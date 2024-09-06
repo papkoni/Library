@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using CSharpFunctionalExtensions;
 
 namespace Library.Core.Models
 {
+
 	public class Book
 	{
         public Guid Id { get; }
 
+
         public string Title { get; } = string.Empty;
 
-        public string ISBN { get; } = string.Empty;
+        public string ISBN { get;  } = string.Empty;
 
-        public string Description { get; } = string.Empty;
+        public string Description { get;set; } = string.Empty;
 
         public DateTime? RecieveDate { get; }
 
@@ -19,14 +22,16 @@ namespace Library.Core.Models
 
         public string Genre { get; } = string.Empty;
 
-        public Guid AuthorId { get; }
+        public Guid Author { get; }
 
         public string ImageName { get; set; } = string.Empty;
 
-        public Guid? UserId { get; set; }
+        public Guid? User { get; set; }
 
+
+       
         private Book(Guid id, string title, string isbn, string description,
-            DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId,string imageName, Guid? userId)
+            DateTime? recieveDate, DateTime? returnDate, string genre, Guid author,string imageName, Guid? user)
 		{
             Id = id;
             Title = title;
@@ -35,23 +40,23 @@ namespace Library.Core.Models
             RecieveDate = recieveDate;
             ReturnDate = returnDate;
             Genre = genre;
-            AuthorId = authorId;
+            Author = author;
             ImageName = imageName;
-            UserId = userId;
+            User = user;
 
         }
 
         
 
 
-        public static Book Create(Guid id, string title, string isbn, string description,DateTime? recieveDate,
-            DateTime? returnDate, string genre, Guid authorId, string imageName = "", Guid? userId = null)
+        public static Result<Book> Create(Guid id, string title, string isbn, string description,DateTime? recieveDate,
+            DateTime? returnDate, string genre, Guid author, Guid? user, string imageName = "")
         {
             // ADD VALIDATION!!!!!!!!!!!!!!!
 
-            var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, authorId, imageName, userId);
+            var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, author, imageName, user);
 
-            return book;
+            return Result.Success(book);
         }
 
        

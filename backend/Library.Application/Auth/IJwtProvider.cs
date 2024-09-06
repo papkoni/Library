@@ -7,8 +7,7 @@ namespace Library.Application.Auth
     public interface IJwtProvider
     {
         (string accessToken, string refreshToken) Generate(User user);
-        ClaimsPrincipal? ValidateRefreshToken(string refreshToken);
-        ClaimsPrincipal? ValidateAccessToken(string token);
+        bool ValidateRefreshToken(string refreshToken);
     }
 }
 

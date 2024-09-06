@@ -1,8 +1,10 @@
 ﻿using System;
+using Library.Core.Models;
+
 namespace Library.API.Contracts
 {
     //приходит с фронта
-    public record BooksRequest(
+    public record BookRequest(
         
         string title,
         string isbn,
@@ -10,7 +12,10 @@ namespace Library.API.Contracts
         DateTime? recieveDate,
         DateTime? returnDate,
         string genre,
-        string authorID);
+        User user,
+        Author author,
+        IFormFile imageFile
+        );
 
 }
 

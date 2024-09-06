@@ -6,6 +6,9 @@ namespace Library.DataAccess.Entites
 	{
         public Guid Id { get; set; }
 
+        public required string Role { get; set; }
+
+
         public string Name { get;  set; } = string.Empty;
 
         public string PasswordHash { get;  set; } = string.Empty;

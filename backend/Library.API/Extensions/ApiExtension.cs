@@ -16,8 +16,7 @@ namespace Library.API.Extensions
 
             if (jwtOptions == null || string.IsNullOrEmpty(jwtOptions.SecretKey))
             {
-                throw new Exception();
-                //throw new InvalidOperationException("JWT configuration is missing or invalid.");
+                throw new InvalidOperationException("JWT configuration is missing or invalid.");
             }
 
             services

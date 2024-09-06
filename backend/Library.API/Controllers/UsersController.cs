@@ -1,5 +1,8 @@
-﻿using Library.API.Contracts;
+﻿using System.Security.Claims;
+using Library.API.Contracts;
+using Library.Application.Services;
 using Library.Core.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers
@@ -21,17 +24,16 @@ namespace Library.API.Controllers
 
 
         [HttpPost("Register")]
-        public async Task<IResult> Register([FromBody] RegisterUserRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
             var context = HttpContext;
 
-            var (accessToken, refreshToken, name, email, id) = await _usersService.Register(request.Name, request.Password, request.Email);
+            var (accessToken, refreshToken) = await _usersService.Register(request.Name, request.Password, request.Email);
 
-            var registerUserResponse = new RegisterUserResponse(id, name, email);
 
             context.Response.Cookies.Append("secretCookie", refreshToken);
 
-            return Results.Ok(new { accessToken, refreshToken, user = registerUserResponse });
+            return Ok(new { accessToken, refreshToken });
         }
 
 
@@ -39,37 +41,68 @@ namespace Library.API.Controllers
 
 
         [HttpPost("Login")]
-        public async Task<IResult> Login([FromBody] LoginUserRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginUserRequest request)
         {
             var context = HttpContext;
 
-            var (accessToken, refreshToken, name, email, id) = await _usersService.Login( request.Email, request.Password);
+            var (accessToken, refreshToken , user) = await _usersService.Login( request.Email, request.Password);
 
-            var registerUserResponse = new LoginUserResponse(id, email, name);
 
             context.Response.Cookies.Append("secretCookie", refreshToken);
 
-            return Results.Ok(new { accessToken, refreshToken, user = registerUserResponse });
+            return Ok(new { accessToken, refreshToken, user });
         }
-
+        
         [HttpPost("RefreshToken")]
-        public async Task<IResult> Refresh()
+        public async Task<IActionResult> Refresh()
         {
+            Console.WriteLine("suka");
             var context = HttpContext;
 
             var refreshTokenFromCookies = context.Request.Cookies["secretCookie"];
 
             if (string.IsNullOrEmpty(refreshTokenFromCookies))
             {
-                throw new Exception();
+                return Unauthorized(new { message = "Refresh token is missing or invalid." });
             }
-            var (accessToken, refreshToken, name, email, id) = await _usersService.Refresh(refreshTokenFromCookies);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var registerUserResponse = new RegisterUserResponse(id, name, email);
+            var (accessToken, refreshToken, user) = await _usersService.Refresh(refreshTokenFromCookies, userIdClaim);
 
             context.Response.Cookies.Append("secretCookie", refreshToken);
 
-            return Results.Ok(new { accessToken, refreshToken, user = registerUserResponse });
+            return Ok(new { accessToken, refreshToken, user });
+        }
+
+        //валедейшен аксес
+        [Authorize]
+        [HttpGet("CheckAccess")]
+        public async  Task<IActionResult> CheckAccess()
+        {
+
+
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                
+
+                var user = await _usersService.CheckAccess(userIdClaim);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + "yyyyy");
+            }
+        }
+
+
+        [HttpGet("Logout")]
+        //[Authorize(Policy = "UserOrAdmin")]
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Delete("secretCookie");
+
+            return Ok();
         }
 
     }

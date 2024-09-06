@@ -11,7 +11,7 @@
 
         }
 
-        public (byte[] imageBytes, string mimeType) GetImage(string fileName)
+        public (byte[]? imageBytes, string? mimeType) GetImage(string fileName)
         {
             var filePath = Path.Combine(_imageDirectory, fileName);
 

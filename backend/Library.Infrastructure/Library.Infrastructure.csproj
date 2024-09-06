@@ -12,14 +12,12 @@
     <ProjectReference Include="..\Library.Application\Library.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Images\" />
     <None Remove="Authentication\" />
-    <None Remove="Cache\" />
+    <None Remove="WorkWithImage\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="Authentication\" />
-    <Folder Include="Cache\" />
+    <Folder Include="WorkWithImage\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />

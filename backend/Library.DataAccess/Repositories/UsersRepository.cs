@@ -12,13 +12,11 @@ namespace Library.DataAccess.Repositories
 
         private readonly LibraryDbContext _context;
 
-        private readonly IMapper _mapper;
 
-        public UsersRepository(LibraryDbContext context, IMapper mapper)
+        public UsersRepository(LibraryDbContext context)
 		{
             _context = context;
 
-            _mapper = mapper;
         }
 
         //ПЕРЕДЕЛАТЬ ВСЕ ПОД НОВЫЕ ЭНТИТИ
@@ -30,7 +28,8 @@ namespace Library.DataAccess.Repositories
                 Name = user.Name,
                 PasswordHash = user.PasswordHash,
                 Email = user.Email,
-                RefreshTokenId = user.RefreshTokenId
+                RefreshTokenId = user.RefreshTokenId,
+                Role = user.Role
             };
 
             await _context.Users.AddAsync(userEntity);
@@ -50,7 +49,7 @@ namespace Library.DataAccess.Repositories
                 return null;
             }
 
-            var user = User.Create(userEntity.Id, userEntity.Name, userEntity.PasswordHash, userEntity.Email);
+            var user = User.Create(userEntity.Id, userEntity.Name, userEntity.PasswordHash, userEntity.Email, userEntity.Role);
             user.RefreshTokenId = userEntity.RefreshTokenId;
             return user;
         }
@@ -67,7 +66,7 @@ namespace Library.DataAccess.Repositories
                 return null;
             }
 
-            var user = User.Create(userEntity.Id, userEntity.Name, userEntity.PasswordHash, userEntity.Email);
+            var user = User.Create(userEntity.Id, userEntity.Name, userEntity.PasswordHash, userEntity.Email, userEntity.Role);
             user.RefreshTokenId = userEntity.RefreshTokenId;
             return user;
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using Library.Core.Models;
+
 namespace Library.API.Contracts
 {
 	
@@ -11,6 +13,7 @@ namespace Library.API.Contracts
         DateTime? recieveDate,
         DateTime? returnDate,
         string genre,
-        Guid authorID);
+        Guid author
+        );
 }
 
