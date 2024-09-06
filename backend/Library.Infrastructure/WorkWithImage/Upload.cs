@@ -5,30 +5,31 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Infrastructure.WorkWithImage
 {
-	public class Upload: IUpload
+    public class Upload : IUpload
     {
-
         private readonly string _imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
-        public async Task<string> UploadImage(IFormFile file)
+
+        public async Task<string> UploadImage(byte[] imageBytes, string fileName)
         {
-            if (file == null || file.Length == 0)
+            if (imageBytes == null || imageBytes.Length == 0)
             {
-                throw new Exception("no file");
+                throw new Exception("No image data provided.");
             }
 
-
-           
-            var fileName = Path.GetFileName(file.FileName);
             var filePath = Path.Combine(_imageFolderPath, fileName);
 
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            // Создаем папку, если она не существует
+            if (!Directory.Exists(_imageFolderPath))
             {
-                await file.CopyToAsync(stream);
+                Directory.CreateDirectory(_imageFolderPath);
             }
+
+            // Записываем байты изображения в файл
+            await File.WriteAllBytesAsync(filePath, imageBytes);
 
             return fileName;
         }
     }
+
 }
 

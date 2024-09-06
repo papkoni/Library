@@ -5,7 +5,7 @@ namespace Library.Application.Image
 {
 	public interface IUpload
 	{
-        Task<string> UploadImage(IFormFile file);
+        Task<string> UploadImage(byte[] imageBytes, string fileName);
 
     }
 }

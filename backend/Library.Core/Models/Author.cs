@@ -30,14 +30,14 @@ namespace Library.Core.Models
         }
 
 
-        public static Result<Author> Create(Guid id, string firstName, string surname,
+        public static Author Create(Guid id, string firstName, string surname,
             DateTime? birthday, string? country, List<Book>? books)
         {
             // ADD VALIDATION!!!!!!!!!!!!!!!
 
             var author = new Author(id, firstName, surname, birthday, country, books);
 
-            return Result.Success(author);
+            return author;
         }
     }
 }

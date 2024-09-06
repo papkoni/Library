@@ -38,19 +38,24 @@ namespace Library.API.Controllers
         }
 
         [HttpPost("AddBook")]
-        //[Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AddBook([FromBody] BookRequest bookRequest)
         {
-            //var imageName = await _upload.UploadImage(bookRequest.imageFile);
+            var imageName = await _upload.UploadImage(bookRequest.imageFile, bookRequest.imageName);
 
-            //if( string.IsNullOrEmpty(imageName)) { imageName = " "; }
+            if (string.IsNullOrEmpty(imageName))
+            {
+                imageName = " ";
+            }
 
-            //var book = Book.Create(Guid.NewGuid(), bookRequest.title, bookRequest.isbn, bookRequest.description,
-            //    bookRequest.recieveDate, bookRequest.returnDate, bookRequest.genre, bookRequest.author, bookRequest.user, imageName);
-            //await _booksService.AddBook(book);
+            var book = Book.Create(Guid.NewGuid(), bookRequest.title, bookRequest.isbn, bookRequest.description,
+                bookRequest.recieveDate, bookRequest.returnDate, bookRequest.genre, bookRequest.author, bookRequest.user, imageName);
+
+             await _booksService.AddBook(book);
+
             return Ok();
-
         }
+
 
         [HttpGet("BookById")]
         public async Task<ActionResult> GetBooksById(Guid id)

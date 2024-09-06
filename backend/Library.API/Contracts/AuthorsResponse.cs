@@ -10,7 +10,7 @@ namespace Library.API.Contracts
        string Surname,
        DateTime? Birthday,
        string? Country,
-       List<BookWithotImageResponse>? Books
+       List<BookWithoutImageResponse>? Books
        
        );
 

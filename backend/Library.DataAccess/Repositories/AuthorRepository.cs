@@ -17,55 +17,180 @@ namespace Library.DataAccess.Repositories
 
         }
 
-       public async Task<List<Author>> GetAllAuthors()
+        public async Task<List<Author>> GetAllAuthors()
         {
+            // Получаем всех авторов с подгруженными книгами
             var authorEntities = await _context.Authors
                 .AsNoTracking()
                 .Include(a => a.Books) // Подгружаем книги, если нужно
                 .ToListAsync();
 
-            var authors = new List<Author>();
-
-            foreach (var authorEntity in authorEntities)
+            // Преобразуем authorEntities в Author с помощью LINQ
+            var authors = authorEntities.Select(authorEntity =>
             {
-                var books = authorEntity.Books?.Select(bookEntity => 
+                // Преобразуем книги автора
+                var books = authorEntity.Books?.Select(bookEntity =>
                 {
-                    var bookResult = Book.Create(
-                        bookEntity.Id, 
-                        bookEntity.Title, 
-                        bookEntity.ISBN, 
-                        bookEntity.Description, 
+                    // Создаем объект Book с помощью метода Create
+                    return Book.Create(
+                        bookEntity.Id,
+                        bookEntity.Title,
+                        bookEntity.ISBN,
+                        bookEntity.Description,
                         bookEntity.RecieveDate,
-                        bookEntity.ReturnDate, 
-                        bookEntity.Genre, 
-                        bookEntity.AuthorId, 
-                        bookEntity.UserId, 
+                        bookEntity.ReturnDate,
+                        bookEntity.Genre,
+                        bookEntity.AuthorId,
+                        bookEntity.UserId,
                         bookEntity.ImageName
                     );
+                }).ToList() ?? new List<Book>();
 
-                    // Проверяем успешность создания книги
-                    return bookResult.IsSuccess ? bookResult.Value : null;
-                }).Where(book => book != null).ToList() ?? new List<Book>();
-
-                // Создаем автора
-                var authorResult = Author.Create(
-                    authorEntity.Id, 
-                    authorEntity.FirstName, 
-                    authorEntity.Surname, 
-                    authorEntity.Birthday, 
-                    authorEntity.Country, 
+                // Создаем объект Author
+                return Author.Create(
+                    authorEntity.Id,
+                    authorEntity.FirstName,
+                    authorEntity.Surname,
+                    authorEntity.Birthday,
+                    authorEntity.Country,
                     books
                 );
-
-                // Проверяем успешность создания автора
-                if (authorResult.IsSuccess)
-                {
-                    authors.Add(authorResult.Value);
-                }
-            }
+            }).ToList();
 
             return authors;
-}
+        }
+
+        public async Task<Author?> GetAuthorById(Guid id)
+        {
+            // Получаем автора с подгруженными книгами
+            var authorEntity = await _context.Authors
+                .AsNoTracking()
+                .Include(a => a.Books)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (authorEntity == null)
+            {
+                return null; // Если автора не найдено
+            }
+
+            // Преобразуем книги автора
+            var books = authorEntity.Books?.Select(bookEntity =>
+            {
+                return Book.Create(
+                    bookEntity.Id,
+                    bookEntity.Title,
+                    bookEntity.ISBN,
+                    bookEntity.Description,
+                    bookEntity.RecieveDate,
+                    bookEntity.ReturnDate,
+                    bookEntity.Genre,
+                    bookEntity.AuthorId,
+                    bookEntity.UserId,
+                    bookEntity.ImageName
+                );
+            }).ToList() ?? new List<Book>();
+
+            // Создаем объект Author
+            return Author.Create(
+                authorEntity.Id,
+                authorEntity.FirstName,
+                authorEntity.Surname,
+                authorEntity.Birthday,
+                authorEntity.Country,
+                books
+            );
+        }
+
+
+        public async Task AddAuthor(Author author)
+        {
+            var authorEntity = new AuthorEntity
+            {
+                Id = author.Id,
+                FirstName = author.FirstName,
+                Surname = author.Surname,
+                Birthday = author.Birthday,
+                Country = author.Country
+            };
+
+            await _context.Authors.AddAsync(authorEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAuthor(Guid id)
+        {
+            var authorEntity = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (authorEntity != null)
+            {
+                _context.Authors.Remove(authorEntity);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Author not found.");
+            }
+        }
+
+
+        public async Task<List<Book>> GetBooksByAuthorId(Guid authorId)
+        {
+            var authorEntity = await _context.Authors
+                .AsNoTracking()
+                .Include(a => a.Books)  // Подгружаем книги
+                .FirstOrDefaultAsync(a => a.Id == authorId);
+
+            if (authorEntity == null)
+            {
+                throw new Exception("Author not found.");
+            }
+
+            // Преобразуем книги автора
+            var books = authorEntity.Books?.Select(bookEntity =>
+            {
+                return Book.Create(
+                    bookEntity.Id,
+                    bookEntity.Title,
+                    bookEntity.ISBN,
+                    bookEntity.Description,
+                    bookEntity.RecieveDate,
+                    bookEntity.ReturnDate,
+                    bookEntity.Genre,
+                    bookEntity.AuthorId,
+                    bookEntity.UserId,
+                    bookEntity.ImageName
+                );
+            }).ToList() ?? new List<Book>();
+
+            return books;
+        }
+
+
+
+
+        public async Task UpdateAuthor(Author author)
+        {
+            // Создаем временный объект с обновленными данными
+            var authorEntity = new AuthorEntity
+            {
+                Id = author.Id,
+                FirstName = author.FirstName,
+                Surname = author.Surname,
+                Birthday = author.Birthday,
+                Country = author.Country
+            };
+
+            // Выполняем обновление записи в базе данных
+            await _context.Authors
+                .Where(a => a.Id == authorEntity.Id)
+                .ExecuteUpdateAsync(a => a
+                    .SetProperty(a => a.FirstName, authorEntity.FirstName)
+                    .SetProperty(a => a.Surname, authorEntity.Surname)
+                    .SetProperty(a => a.Birthday, authorEntity.Birthday)
+                    .SetProperty(a => a.Country, authorEntity.Country)
+                );
+        }
+
 
 
 

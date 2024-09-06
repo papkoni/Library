@@ -1,3 +1,4 @@
+
 import Library from "./pages/Library"
 import BookPage from "./pages/BookPage"
 import Auth from "./pages/Auth";
@@ -6,7 +7,7 @@ import {ADMIN_ROUTE, LIBRARY_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, BOOK_ROUTE}
 
 
 
-export const authRoutes = [
+export const adminRoutes = [
     {
         path: ADMIN_ROUTE,
         Component: Admin
@@ -14,7 +15,7 @@ export const authRoutes = [
     
 ]
 
-export const publicRoutes = [
+export const usersRoutes = [
     {
         path: LIBRARY_ROUTE,
         Component: Library
@@ -23,6 +24,12 @@ export const publicRoutes = [
         path: BOOK_ROUTE + '/:id',
         Component: BookPage
     },
+   
+   
+]
+
+export const UnauthRoutes = [
+    
     {
         path: LOGIN_ROUTE,
         Component: Auth
@@ -33,3 +40,4 @@ export const publicRoutes = [
     },
    
 ]
+

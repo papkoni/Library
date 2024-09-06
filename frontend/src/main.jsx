@@ -5,6 +5,7 @@ import React, {createContext}  from "react";
 import UserStore  from './store/UserStore'
 import BookStore from './store/BookStore.jsx';
 import AuthorStore from './store/AuthorStore.jsx';
+import { BrowserRouter } from "react-router-dom";
 
 
 export const Context = createContext(null)
@@ -16,6 +17,7 @@ root.render(
         book: new BookStore(),
         author: new AuthorStore()
     }}>
-        <App />
+        <><App /></>
+        
     </Context.Provider>,
 );

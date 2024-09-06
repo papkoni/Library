@@ -1,4 +1,5 @@
 ﻿
+using CSharpFunctionalExtensions;
 using Library.Application.Cache;
 using Library.Core.Abstractions;
 using Library.Core.Models;
@@ -58,8 +59,29 @@ namespace Library.Application.Services
 
         public async Task AddBook(Book book)
         {
-            await _booksRepository.AddBook(book);
+            if (book == null)
+            {
+                throw new ArgumentNullException(nameof(book), "Book cannot be null.");
+            }
+
+            if (string.IsNullOrWhiteSpace(book.Title))
+            {
+                throw new ArgumentException("Title cannot be empty.", nameof(book.Title));
+            }
+
+            try
+            {
+                // Добавляем книгу через репозиторий
+                await _booksRepository.AddBook(book);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding book: {ex.Message}");
+                throw; // Перебрасываем исключение дальше
+            }
         }
+
+
 
         public async Task Update(Book book)
         {

@@ -49,14 +49,14 @@ namespace Library.Core.Models
         
 
 
-        public static Result<Book> Create(Guid id, string title, string isbn, string description,DateTime? recieveDate,
+        public static Book Create(Guid id, string title, string isbn, string description,DateTime? recieveDate,
             DateTime? returnDate, string genre, Guid author, Guid? user, string imageName = "")
         {
             // ADD VALIDATION!!!!!!!!!!!!!!!
 
             var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, author, imageName, user);
 
-            return Result.Success(book);
+            return book;
         }
 
        
