@@ -27,21 +27,13 @@ namespace Library.API.Middlewares
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
-            var result = string.Empty;
+            string result;
 
             switch (exception)
             {
-                //case ValidationException validationException:
-                //    code = HttpStatusCode.BadRequest;
-                //    result = JsonSerializer.Serialize(new { errors = validationException.Errors });
-                //    break;
-                //case NotFoundException:
-                //    code = HttpStatusCode.NotFound;
-                //    result = JsonSerializer.Serialize(new { error = "Resource not found" });
-                //    break;
                 case UnauthorizedAccessException:
                     code = HttpStatusCode.Unauthorized;
                     result = JsonSerializer.Serialize(new { error = "Unauthorized access" });
@@ -50,20 +42,30 @@ namespace Library.API.Middlewares
                     code = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(new { error = argumentException.Message });
                     break;
+                case KeyNotFoundException keyNotFoundException:
+                    code = HttpStatusCode.NotFound;
+                    result = JsonSerializer.Serialize(new { error = keyNotFoundException.Message });
+                    break;
                 case DbUpdateException dbUpdateException:
                     code = HttpStatusCode.Conflict;
                     result = JsonSerializer.Serialize(new { error = "Database update error" });
                     break;
+                case ValidationException validationException:
+                    code = HttpStatusCode.BadRequest;
+                    result = JsonSerializer.Serialize(new { error = validationException.Message });
+                    break;
                 default:
-                    result = JsonSerializer.Serialize(new { error = "An unexpected error occurred" });
+                    result = JsonSerializer.Serialize(new { error = "An unexpected error occurred. " + $"{exception}" });
                     break;
             }
+
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
 
-            return context.Response.WriteAsync(result);
+            await context.Response.WriteAsync(result);
         }
+
     }
 
 }

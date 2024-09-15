@@ -1,8 +1,7 @@
 ﻿using System;
 using Library.Core.Abstractions;
 using Library.Core.Models;
-using Library.DataAccess.Entites;
-using Library.DataAccess.Mapper.Extensions;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.DataAccess.Repositories
@@ -16,21 +15,13 @@ namespace Library.DataAccess.Repositories
         public RefreshTokensRepository(LibraryDbContext context)
 		{
             _context = context;
-
         }
 
 
         public async Task Add(RefreshToken refreshToken)
         {
-            var refreshTokenEntity = new RefreshTokenEntity()
-            {
-                Id = refreshToken.Id,
-                Token = refreshToken.Token,
-                ExpiryDate = refreshToken.ExpiryDate
 
-            };
-
-            await _context.RefreshTokens.AddAsync(refreshTokenEntity);
+            await _context.RefreshTokens.AddAsync(refreshToken);
             await _context.SaveChangesAsync();
         }
 
@@ -52,7 +43,6 @@ namespace Library.DataAccess.Repositories
             var refreshTokenEntity = await _context.RefreshTokens
                 .Include(rt => rt.User) // Если нужно подгружать данные пользователя
                 .FirstOrDefaultAsync(rt => rt.Token == token);
-            if(refreshTokenEntity == null) { return null; }
             return RefreshToken.Create(refreshTokenEntity.Id, refreshTokenEntity.Token, refreshTokenEntity.ExpiryDate);
         }
     }

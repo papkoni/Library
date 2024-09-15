@@ -2,10 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Abstractions;
 
-using Library.DataAccess.Mapper.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Library.DataAccess.Entites;
-using System.Linq;
 
 namespace Library.DataAccess.Repositories
 {
@@ -24,7 +21,7 @@ namespace Library.DataAccess.Repositories
 
         }
 
-        public async Task<List<Book>> GetAllBooks()
+        public async Task<List<Book?>> GetAllBooks()
         {
             var bookEntities = await _context.Books
                 .AsNoTracking()
@@ -53,10 +50,7 @@ namespace Library.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-            if (bookEntity == null)
-            {
-                throw new Exception("GetBookById: book not found.");
-            }
+           
 
             // Создаем объект Book напрямую, без Result
             return Book.Create(
@@ -79,11 +73,7 @@ namespace Library.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(b => b.ISBN == isbn);
 
-            if (bookEntity == null)
-            {
-                throw new Exception("GetBooksByISBN: book not found.");
-            }
-
+           
             // Создаем объект Book напрямую, без Result
             return Book.Create(
                 bookEntity.Id,
@@ -126,52 +116,28 @@ namespace Library.DataAccess.Repositories
 
         public async Task AddBook(Book book)
         {
-            var bookEntity = new BookEntity
-            {
-                Id = book.Id,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                Description = book.Description,
-                RecieveDate = book.RecieveDate,
-                ReturnDate = book.ReturnDate,
-                Genre = book.Genre,
-                AuthorId = book.Author,
-                ImageName = book.ImageName,
-                UserId = book.User,
-            };
+           
 
-            await _context.Books.AddAsync(bookEntity);
+            await _context.Books.AddAsync(book);
             await _context.SaveChangesAsync();
         }
 
         public async Task Update(Book book)
         {
-            var bookEntity = new BookEntity
-            {
-                Id = book.Id,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                Description = book.Description,
-                RecieveDate = book.RecieveDate,
-                ReturnDate = book.ReturnDate,
-                Genre = book.Genre,
-                AuthorId = book.Author,
-                ImageName = book.ImageName,
-                UserId = book.User,
-            };
+           
 
             await _context.Books
-                .Where(b => b.Id == bookEntity.Id)
+                .Where(b => b.Id == book.Id)
                 .ExecuteUpdateAsync(s => s
-                    .SetProperty(b => b.Title, bookEntity.Title)
-                    .SetProperty(b => b.ISBN, bookEntity.ISBN)
-                    .SetProperty(b => b.Description, bookEntity.Description)
-                    .SetProperty(b => b.RecieveDate, bookEntity.RecieveDate)
-                    .SetProperty(b => b.ReturnDate, bookEntity.ReturnDate)
-                    .SetProperty(b => b.Genre, bookEntity.Genre)
-                    .SetProperty(b => b.AuthorId, bookEntity.AuthorId)
-                    .SetProperty(b => b.ImageName, bookEntity.ImageName)
-                    .SetProperty(b => b.UserId, bookEntity.UserId)
+                    .SetProperty(b => b.Title, book.Title)
+                    .SetProperty(b => b.ISBN, book.ISBN)
+                    .SetProperty(b => b.Description, book.Description)
+                    .SetProperty(b => b.RecieveDate, book.RecieveDate)
+                    .SetProperty(b => b.ReturnDate, book.ReturnDate)
+                    .SetProperty(b => b.Genre, book.Genre)
+                    .SetProperty(b => b.AuthorId, book.AuthorId)
+                    .SetProperty(b => b.ImageName, book.ImageName)
+                    .SetProperty(b => b.UserId, book.UserId)
                 );
         }
 
@@ -185,7 +151,6 @@ namespace Library.DataAccess.Repositories
 
 
 
-        //ВЫДАЧА НА РУКИ + КАРТИНКА
 
 
     }

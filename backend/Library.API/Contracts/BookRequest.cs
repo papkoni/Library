@@ -5,7 +5,7 @@ namespace Library.API.Contracts
 {
     //приходит с фронта
     public record BookRequest(
-        
+        Guid id,
         string title,
         string isbn,
         string description,

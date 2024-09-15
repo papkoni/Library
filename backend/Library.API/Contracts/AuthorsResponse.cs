@@ -5,16 +5,16 @@ namespace Library.API.Contracts
 {
 	
     public record AuthorsResponse(
-       Guid id,
-       string firstName,
+       Guid Id,
+       string FirstName,
        string Surname,
        DateTime? Birthday,
-       string? Country,
-       List<BookWithoutImageResponse>? Books
+       string? Country
+       
        
        );
 
-
+    //List<BookWithoutImageResponse>? Books
 
 }
 

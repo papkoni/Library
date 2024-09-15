@@ -7,18 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Entites\" />
     <None Remove="Configurations\" />
     <None Remove="Repositories\" />
-    <None Remove="Mapper\" />
-    <None Remove="Mapper\Extensions\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entites\" />
     <Folder Include="Configurations\" />
     <Folder Include="Repositories\" />
-    <Folder Include="Mapper\" />
-    <Folder Include="Mapper\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20" />

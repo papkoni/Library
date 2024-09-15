@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>{F11ACF2F-FFFD-487B-9629-506607A60201}</ProjectGuid>
+    <ProjectGuid>{515FD51B-2FCC-4FFD-9043-6D463575B1B8}</ProjectGuid>
     <DockerLaunchBrowser>True</DockerLaunchBrowser>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>library.api</DockerServiceName>

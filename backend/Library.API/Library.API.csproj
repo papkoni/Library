@@ -19,6 +19,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.20" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,10 +42,12 @@
     <None Remove="Contracts\" />
     <None Remove="Extensions\" />
     <None Remove="Middlewares\" />
+    <None Remove="Mapping\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contracts\" />
     <Folder Include="Extensions\" />
     <Folder Include="Middlewares\" />
+    <Folder Include="Mapping\" />
   </ItemGroup>
 </Project>

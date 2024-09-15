@@ -13,6 +13,10 @@ namespace Library.Core.Models
 
         public DateTime ExpiryDate { get; set; }
 
+        public User? User { get; set; }
+
+        private RefreshToken() { }
+
 
         private RefreshToken(Guid id, string token, DateTime expiryDate)
         {

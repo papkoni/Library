@@ -7,6 +7,9 @@ services:
     build:
       context: .
       dockerfile: Library.API/Dockerfile
+    depends_on:
+      - postgres
+      - cache
   cache:
     image: redis
     restart: always

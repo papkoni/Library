@@ -1,7 +1,6 @@
 ﻿using System;
 using Library.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using Library.DataAccess.Entites;
 using Library.Core.Abstractions;
 
 namespace Library.DataAccess.Repositories
@@ -19,13 +18,11 @@ namespace Library.DataAccess.Repositories
 
         public async Task<List<Author>> GetAllAuthors()
         {
-            // Получаем всех авторов с подгруженными книгами
             var authorEntities = await _context.Authors
                 .AsNoTracking()
                 .Include(a => a.Books) // Подгружаем книги, если нужно
                 .ToListAsync();
 
-            // Преобразуем authorEntities в Author с помощью LINQ
             var authors = authorEntities.Select(authorEntity =>
             {
                 // Преобразуем книги автора
@@ -46,7 +43,6 @@ namespace Library.DataAccess.Repositories
                     );
                 }).ToList() ?? new List<Book>();
 
-                // Создаем объект Author
                 return Author.Create(
                     authorEntity.Id,
                     authorEntity.FirstName,
@@ -62,41 +58,34 @@ namespace Library.DataAccess.Repositories
 
         public async Task<Author?> GetAuthorById(Guid id)
         {
-            // Получаем автора с подгруженными книгами
-            var authorEntity = await _context.Authors
+            var author = await _context.Authors
                 .AsNoTracking()
                 .Include(a => a.Books)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-            if (authorEntity == null)
-            {
-                return null; // Если автора не найдено
-            }
-
-            // Преобразуем книги автора
-            var books = authorEntity.Books?.Select(bookEntity =>
+            var books = author.Books?.Select(book =>
             {
                 return Book.Create(
-                    bookEntity.Id,
-                    bookEntity.Title,
-                    bookEntity.ISBN,
-                    bookEntity.Description,
-                    bookEntity.RecieveDate,
-                    bookEntity.ReturnDate,
-                    bookEntity.Genre,
-                    bookEntity.AuthorId,
-                    bookEntity.UserId,
-                    bookEntity.ImageName
+                    book.Id,
+                    book.Title,
+                    book.ISBN,
+                    book.Description,
+                    book.RecieveDate,
+                    book.ReturnDate,
+                    book.Genre,
+                    book.AuthorId,
+                    book.UserId,
+                    book.ImageName
                 );
             }).ToList() ?? new List<Book>();
 
             // Создаем объект Author
             return Author.Create(
-                authorEntity.Id,
-                authorEntity.FirstName,
-                authorEntity.Surname,
-                authorEntity.Birthday,
-                authorEntity.Country,
+                author.Id,
+                author.FirstName,
+                author.Surname,
+                author.Birthday,
+                author.Country,
                 books
             );
         }
@@ -104,32 +93,18 @@ namespace Library.DataAccess.Repositories
 
         public async Task AddAuthor(Author author)
         {
-            var authorEntity = new AuthorEntity
-            {
-                Id = author.Id,
-                FirstName = author.FirstName,
-                Surname = author.Surname,
-                Birthday = author.Birthday,
-                Country = author.Country
-            };
+            
 
-            await _context.Authors.AddAsync(authorEntity);
+            await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAuthor(Guid id)
+        public async Task DeleteAuthor(Author author)
         {
-            var authorEntity = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
-
-            if (authorEntity != null)
-            {
-                _context.Authors.Remove(authorEntity);
+            
+                _context.Authors.Remove(author);
                 await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception("Author not found.");
-            }
+           
         }
 
 
@@ -140,12 +115,8 @@ namespace Library.DataAccess.Repositories
                 .Include(a => a.Books)  // Подгружаем книги
                 .FirstOrDefaultAsync(a => a.Id == authorId);
 
-            if (authorEntity == null)
-            {
-                throw new Exception("Author not found.");
-            }
+           
 
-            // Преобразуем книги автора
             var books = authorEntity.Books?.Select(bookEntity =>
             {
                 return Book.Create(
@@ -168,26 +139,18 @@ namespace Library.DataAccess.Repositories
 
 
 
-        public async Task UpdateAuthor(Author author)
+        public async Task UpdateAuthor(Author author, CancellationToken cancellationToken)
         {
-            // Создаем временный объект с обновленными данными
-            var authorEntity = new AuthorEntity
-            {
-                Id = author.Id,
-                FirstName = author.FirstName,
-                Surname = author.Surname,
-                Birthday = author.Birthday,
-                Country = author.Country
-            };
+           
 
-            // Выполняем обновление записи в базе данных
             await _context.Authors
-                .Where(a => a.Id == authorEntity.Id)
+                .Where(a => a.Id == author.Id)
                 .ExecuteUpdateAsync(a => a
-                    .SetProperty(a => a.FirstName, authorEntity.FirstName)
-                    .SetProperty(a => a.Surname, authorEntity.Surname)
-                    .SetProperty(a => a.Birthday, authorEntity.Birthday)
-                    .SetProperty(a => a.Country, authorEntity.Country)
+                    .SetProperty(a => a.FirstName, author.FirstName)
+                    .SetProperty(a => a.Surname, author.Surname)
+                    .SetProperty(a => a.Birthday, author.Birthday)
+                    .SetProperty(a => a.Country, author.Country),
+                    cancellationToken
                 );
         }
 

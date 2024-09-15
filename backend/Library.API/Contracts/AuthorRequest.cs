@@ -6,8 +6,8 @@ namespace Library.API.Contracts
          string firstName,
          string surname, 
          DateTime? birthday ,
-         string? country,
-         List<BookWithoutImageResponse>? books 
+         string? country
+         //List<BookWithoutImageResponse>? books 
     );
 }
 

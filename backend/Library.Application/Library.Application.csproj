@@ -7,22 +7,44 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Handlers\" />
-    <None Remove="Services\" />
     <None Remove="Auth\" />
     <None Remove="Cache\" />
     <None Remove="Image\" />
+    <None Remove="Queries\" />
+    <None Remove="Commands\" />
+    <None Remove="Handlers\" />
+    <None Remove="Queries\Authors\" />
+    <None Remove="Queries\Books\" />
+    <None Remove="Queries\Users\" />
+    <None Remove="Handlers\Authors\" />
+    <None Remove="Commands\Authors\" />
+    <None Remove="Handlers\Books\" />
+    <None Remove="Commands\Books\" />
+    <None Remove="Handlers\Users\" />
+    <None Remove="Commands\Users\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Handlers\" />
-    <Folder Include="Services\" />
     <Folder Include="Auth\" />
     <Folder Include="Cache\" />
     <Folder Include="Image\" />
+    <Folder Include="Queries\" />
+    <Folder Include="Commands\" />
+    <Folder Include="Handlers\" />
+    <Folder Include="Queries\Authors\" />
+    <Folder Include="Queries\Books\" />
+    <Folder Include="Queries\Users\" />
+    <Folder Include="Handlers\Authors\" />
+    <Folder Include="Commands\Authors\" />
+    <Folder Include="Handlers\Books\" />
+    <Folder Include="Commands\Books\" />
+    <Folder Include="Handlers\Users\" />
+    <Folder Include="Commands\Users\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Library.Core\Library.Core.csproj" />

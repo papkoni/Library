@@ -1,15 +1,15 @@
-﻿using Library.DataAccess.Configurations;
-using Library.DataAccess.Entites;
+﻿using Library.Core.Models;
+using Library.DataAccess.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.DataAccess
 {
 	public class LibraryDbContext: DbContext
 	{
-        public virtual DbSet<AuthorEntity> Authors { get; set; }
-        public virtual DbSet<BookEntity> Books { get; set; }
-        public virtual DbSet<UserEntity> Users { get; set; }
-        public virtual DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+        public virtual DbSet<Author> Authors { get; set; }
+        public virtual DbSet<Book> Books { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public LibraryDbContext()
 		{

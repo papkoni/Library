@@ -22,7 +22,7 @@ namespace Library.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Library.DataAccess.Entites.AuthorEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.Author", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace Library.DataAccess.Migrations
                     b.ToTable("author", (string)null);
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.BookEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.Book", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +103,7 @@ namespace Library.DataAccess.Migrations
                     b.ToTable("book", (string)null);
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.RefreshTokenEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,7 +121,7 @@ namespace Library.DataAccess.Migrations
                     b.ToTable("refreshToken", (string)null);
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.UserEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,15 +158,15 @@ namespace Library.DataAccess.Migrations
                     b.ToTable("user", (string)null);
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.BookEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.Book", b =>
                 {
-                    b.HasOne("Library.DataAccess.Entites.AuthorEntity", "Author")
+                    b.HasOne("Library.Core.Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library.DataAccess.Entites.UserEntity", "User")
+                    b.HasOne("Library.Core.Models.User", "User")
                         .WithMany("Books")
                         .HasForeignKey("UserId");
 
@@ -175,28 +175,28 @@ namespace Library.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.UserEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.User", b =>
                 {
-                    b.HasOne("Library.DataAccess.Entites.RefreshTokenEntity", "RefreshToken")
+                    b.HasOne("Library.Core.Models.RefreshToken", "RefreshToken")
                         .WithOne("User")
-                        .HasForeignKey("Library.DataAccess.Entites.UserEntity", "RefreshTokenId")
+                        .HasForeignKey("Library.Core.Models.User", "RefreshTokenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("RefreshToken");
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.AuthorEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.Author", b =>
                 {
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.RefreshTokenEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.RefreshToken", b =>
                 {
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Library.DataAccess.Entites.UserEntity", b =>
+            modelBuilder.Entity("Library.Core.Models.User", b =>
                 {
                     b.Navigation("Books");
                 });

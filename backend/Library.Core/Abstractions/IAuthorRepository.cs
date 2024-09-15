@@ -9,9 +9,9 @@ namespace Library.Core.Abstractions
         Task<List<Author>> GetAllAuthors();
         Task<Author?> GetAuthorById(Guid id);
         Task AddAuthor(Author author);
-        Task DeleteAuthor(Guid id);
+        Task DeleteAuthor(Author author);
         Task<List<Book>> GetBooksByAuthorId(Guid authorId);
-        Task UpdateAuthor(Author author);
+        Task UpdateAuthor(Author author, CancellationToken cancellationToken);
     }
 }
 

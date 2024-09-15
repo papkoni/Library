@@ -1,13 +1,13 @@
 ﻿using System;
-using Library.DataAccess.Entites;
+using Library.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Library.DataAccess.Configurations
 {
-    public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshTokenEntity>
+    public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
     {
-        public void Configure(EntityTypeBuilder<RefreshTokenEntity> builder)
+        public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
             builder.HasKey(r => r.Id);
 
@@ -24,7 +24,7 @@ namespace Library.DataAccess.Configurations
 
             builder.HasOne(r => r.User)
                    .WithOne(u => u.RefreshToken)
-                   .HasForeignKey<UserEntity>(u => u.RefreshTokenId);
+                   .HasForeignKey<User>(u => u.RefreshTokenId);
 
         }
     }

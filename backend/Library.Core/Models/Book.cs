@@ -7,31 +7,35 @@ namespace Library.Core.Models
 
 	public class Book
 	{
-        public Guid Id { get; }
+        public Guid Id { get; set; }
 
+        public string Title { get; set; } = string.Empty;
 
-        public string Title { get; } = string.Empty;
+        public string ISBN { get; set; } = string.Empty;
 
-        public string ISBN { get;  } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
-        public string Description { get;set; } = string.Empty;
+        public DateTime? RecieveDate { get; set; }
 
-        public DateTime? RecieveDate { get; }
+        public DateTime? ReturnDate { get; set; }
 
-        public DateTime? ReturnDate { get;  }
+        public string Genre { get; set; } = string.Empty;
 
-        public string Genre { get; } = string.Empty;
+        public Guid AuthorId { get; set; }
 
-        public Guid Author { get; }
+        public Author? Author { get; set; }
+
+        public Guid? UserId { get; set; }
+
+        public User? User { get; set; }
 
         public string ImageName { get; set; } = string.Empty;
 
-        public Guid? User { get; set; }
+        private Book() { }
 
 
-       
         private Book(Guid id, string title, string isbn, string description,
-            DateTime? recieveDate, DateTime? returnDate, string genre, Guid author,string imageName, Guid? user)
+            DateTime? recieveDate, DateTime? returnDate, string genre, Guid authorId, string imageName, Guid? userId)
 		{
             Id = id;
             Title = title;
@@ -40,9 +44,9 @@ namespace Library.Core.Models
             RecieveDate = recieveDate;
             ReturnDate = returnDate;
             Genre = genre;
-            Author = author;
+            AuthorId = authorId;
             ImageName = imageName;
-            User = user;
+            UserId = userId;
 
         }
 
@@ -50,11 +54,11 @@ namespace Library.Core.Models
 
 
         public static Book Create(Guid id, string title, string isbn, string description,DateTime? recieveDate,
-            DateTime? returnDate, string genre, Guid author, Guid? user, string imageName = "")
+            DateTime? returnDate, string genre, Guid authorId, Guid? userId, string imageName = "")
         {
             // ADD VALIDATION!!!!!!!!!!!!!!!
 
-            var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, author, imageName, user);
+            var book = new Book(id, title, isbn, description, recieveDate, returnDate, genre, authorId, imageName, userId);
 
             return book;
         }

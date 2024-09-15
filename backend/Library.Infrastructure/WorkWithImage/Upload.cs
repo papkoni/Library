@@ -13,7 +13,7 @@ namespace Library.Infrastructure.WorkWithImage
         {
             if (imageBytes == null || imageBytes.Length == 0)
             {
-                throw new Exception("No image data provided.");
+                return null;
             }
 
             var filePath = Path.Combine(_imageFolderPath, fileName);

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Library.Core.Abstractions;
 using Library.Core.Models;
-using Library.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.DataAccess.Repositories
@@ -22,17 +21,9 @@ namespace Library.DataAccess.Repositories
         //ПЕРЕДЕЛАТЬ ВСЕ ПОД НОВЫЕ ЭНТИТИ
         public async Task Add(User user)
         {
-            var userEntity = new UserEntity()
-            {
-                Id = user.Id,
-                Name = user.Name,
-                PasswordHash = user.PasswordHash,
-                Email = user.Email,
-                RefreshTokenId = user.RefreshTokenId,
-                Role = user.Role
-            };
+           
 
-            await _context.Users.AddAsync(userEntity);
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 

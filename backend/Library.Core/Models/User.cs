@@ -11,7 +11,6 @@ namespace Library.Core.Models
         public string Role { get; set; }
 
 
-
         public string Name { get; private set; } = string.Empty;
 
         public string PasswordHash { get; private set; } = string.Empty;
@@ -20,9 +19,13 @@ namespace Library.Core.Models
 
         public Guid RefreshTokenId { get; set; }
 
+        public RefreshToken? RefreshToken { get; set; }
 
+        public List<Book>? Books { get; set; }
 
-        [JsonConstructor]
+        
+        private User() { }
+
 
         public User(Guid id, string name, string passwordHash, string email, string role)
 		{

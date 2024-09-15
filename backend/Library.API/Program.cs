@@ -1,23 +1,23 @@
 ﻿
 
-using System.Text;
 using Library.Application.Auth;
-using Library.Application.Services;
 using Library.Core.Abstractions;
 using Library.DataAccess;
-using Library.DataAccess.Mapper;
+
 using Library.DataAccess.Repositories;
 using Library.Infrastructure.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.CookiePolicy;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using static CSharpFunctionalExtensions.Result;
+
 using Library.API.Extensions;
 using Library.API.Middlewares;
 using Library.Infrastructure.WorkWithImage;
 using Library.Application.Cache;
 using Library.Application.Image;
+using Mapster;
+using MapsterMapper;
+using Library.Application.Handlers.Books;
+using Library.API.Mapping;
 
 namespace Library.API;
 
@@ -53,10 +53,8 @@ public class Program
             options.Configuration = builder.Configuration.GetConnectionString("Cache"));
 
         builder.Services.AddScoped<IBooksRepository, BooksRepository>();
-        builder.Services.AddScoped<IBooksService, BooksService>();
-        builder.Services.AddScoped<IUsersService, UsersService>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        builder.Services.AddScoped<IAuthorsService, AuthorsService>();
+        //builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 
         builder.Services.AddScoped<IUsersRepository, UsersRepository>();
         builder.Services.AddScoped<IRefreshTokensRepository, RefreshTokensRepository>();
@@ -66,7 +64,14 @@ public class Program
         builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         builder.Services.AddScoped<IUpload, Upload>();
+        //builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllBooksQueryHandler).Assembly));
+        // Регистрация Mapster с DI
+        builder.Services.AddSingleton<TypeAdapterConfig>();
+
+        // Регистрируем автоматически все маппинги, имплементирующие IRegister
+        builder.Services.AddSingleton<IMapper, ServiceMapper>();
 
         builder.Services.AddAutoMapper(typeof(MapperProfile));
 
@@ -82,10 +87,11 @@ public class Program
         }
         );
 
+        MappingConfig.RegisterMappings();
 
 
 
-         var app = builder.Build();
+        var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -97,7 +103,7 @@ public class Program
         app.UseCors("AllowFrontendApp"); // Применяем политику CORS перед UseRouting
         app.UseHttpsRedirection();
 
-        //app.UseCustomExceptionHandler();
+        app.UseCustomExceptionHandler();
         app.UseAuthentication();
         app.UseAuthorization();
 
