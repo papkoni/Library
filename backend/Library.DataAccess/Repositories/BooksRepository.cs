@@ -10,14 +10,12 @@ namespace Library.DataAccess.Repositories
     {
         private readonly LibraryDbContext _context;
 
-        private readonly IMapper _mapper;
 
         //ПЕРЕДЕЛАТЬ ВСЕ ПОД НОВЫЕ ЭНТИТИ
-        public BooksRepository(LibraryDbContext context, IMapper mapper)
+        public BooksRepository(LibraryDbContext context)
         {
             _context = context;
 
-            _mapper = mapper;
 
         }
 
@@ -27,21 +25,8 @@ namespace Library.DataAccess.Repositories
                 .AsNoTracking()
                 .ToListAsync();
 
-            // Преобразуем список сущностей в список объектов Book
-            var books = bookEntities.Select(bookEntity => Book.Create(
-                bookEntity.Id,
-                bookEntity.Title,
-                bookEntity.ISBN,
-                bookEntity.Description,
-                bookEntity.RecieveDate,
-                bookEntity.ReturnDate,
-                bookEntity.Genre,
-                bookEntity.AuthorId,
-                bookEntity.UserId,
-                bookEntity.ImageName
-            )).ToList();
-
-            return books;
+          
+            return bookEntities;
         }
 
         public async Task<Book?> GetBookById(Guid id)
@@ -50,21 +35,10 @@ namespace Library.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-           
+
 
             // Создаем объект Book напрямую, без Result
-            return Book.Create(
-                bookEntity.Id,
-                bookEntity.Title,
-                bookEntity.ISBN,
-                bookEntity.Description,
-                bookEntity.RecieveDate,
-                bookEntity.ReturnDate,
-                bookEntity.Genre,
-                bookEntity.AuthorId,
-                bookEntity.UserId,
-                bookEntity.ImageName
-            );
+            return bookEntity;
         }
 
         public async Task<Book?> GetBooksByISBN(string isbn)
@@ -73,20 +47,10 @@ namespace Library.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(b => b.ISBN == isbn);
 
-           
+
             // Создаем объект Book напрямую, без Result
-            return Book.Create(
-                bookEntity.Id,
-                bookEntity.Title,
-                bookEntity.ISBN,
-                bookEntity.Description,
-                bookEntity.RecieveDate,
-                bookEntity.ReturnDate,
-                bookEntity.Genre,
-                bookEntity.AuthorId,
-                bookEntity.UserId,
-                bookEntity.ImageName
-            );
+            return bookEntity;
+           
         }
 
         public async Task<List<Book>> GetByPage(int page, int pageSize)
@@ -97,21 +61,8 @@ namespace Library.DataAccess.Repositories
                 .Take(pageSize)
                 .ToListAsync();
 
-            // Преобразуем сущности книг в объекты Book
-            var books = bookEntities.Select(bookEntity => Book.Create(
-                bookEntity.Id,
-                bookEntity.Title,
-                bookEntity.ISBN,
-                bookEntity.Description,
-                bookEntity.RecieveDate,
-                bookEntity.ReturnDate,
-                bookEntity.Genre,
-                bookEntity.AuthorId,
-                bookEntity.UserId,
-                bookEntity.ImageName
-            )).ToList();
 
-            return books;
+            return bookEntities;
         }
 
         public async Task AddBook(Book book)

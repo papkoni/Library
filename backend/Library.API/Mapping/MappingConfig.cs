@@ -12,6 +12,18 @@ namespace Library.API.Mapping
     {
         public static void RegisterMappings()
         {
+            TypeAdapterConfig<AddBookCommand, Book>
+               .NewConfig()
+               .Map(dest => dest.Title, src => src.Title)
+               .Map(dest => dest.ISBN, src => src.ISBN)
+               .Map(dest => dest.Description, src => src.Description)
+               .Map(dest => dest.RecieveDate, src => src.RecieveDate)
+               .Map(dest => dest.ReturnDate, src => src.ReturnDate)
+               .Map(dest => dest.Genre, src => src.Genre)
+               .Map(dest => dest.AuthorId, src => src.AuthorId)
+               .Map(dest => dest.UserId, src => src.UserId)
+               .Map(dest => dest.ImageName, src => src.ImageName);
+
             // Маппинг AuthorRequest -> AddAuthorCommand
             TypeAdapterConfig<AuthorRequest, AddAuthorCommand>
                 .NewConfig()

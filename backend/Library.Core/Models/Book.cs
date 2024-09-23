@@ -31,7 +31,7 @@ namespace Library.Core.Models
 
         public string ImageName { get; set; } = string.Empty;
 
-        private Book() { }
+        public Book() { }
 
 
         private Book(Guid id, string title, string isbn, string description,

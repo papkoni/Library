@@ -2,6 +2,7 @@
 using Library.Application.Commands.Books;
 using Library.Core.Abstractions;
 using Library.Core.Models;
+using Mapster;
 using MediatR;
 
 namespace Library.Application.Handlers.Books
@@ -17,19 +18,8 @@ namespace Library.Application.Handlers.Books
 
         public async Task<Unit> Handle(AddBookCommand request, CancellationToken cancellationToken)
         {
-            // Создаем книгу
-            var book = Book.Create(
-                id: Guid.NewGuid(),
-                title: request.Title,
-                isbn: request.ISBN,
-                description: request.Description,
-                recieveDate: request.RecieveDate,
-                returnDate: request.ReturnDate,
-                genre: request.Genre,
-                authorId: request.AuthorId,
-                userId: request.UserId,
-                imageName: request.ImageName
-            );
+            var book = request.Adapt<Book>();
+
 
             // Добавляем книгу через репозиторий
             await _booksRepository.AddBook(book);
